@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Goff"]
   s.date = "2012-04-23"
-  s.description = "TODO: Connect your RAILS app to OTRS/ITSM"
+  s.description = "Connect your RAILS app to OTRS/ITSM"
   s.email = "cpuguy83@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -40,6 +40,7 @@ Gem::Specification.new do |s|
     "lib/otrs/ticket/state.rb",
     "lib/otrs/ticket/ticket_queue.rb",
     "lib/otrs/ticket/type.rb",
+    "otrs_connector.gemspec",
     "test/helper.rb",
     "test/test_otrs_connector.rb"
   ]
@@ -47,7 +48,7 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.23"
-  s.summary = "TODO: Connects OTRS API to create tikets, manipulate CI's, etc."
+  s.summary = "Connects OTRS API to create tikets, manipulate CI's, etc."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
