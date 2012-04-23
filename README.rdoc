@@ -1,6 +1,6 @@
 = otrs_connector
 
-otrs_connector connects to the OTRS API, wich some modifications that opens up more of the OTRS/ITSM internals.
+otrs_connector connects to the OTRS API, with some modifications that opens up more of the OTRS/ITSM internals.
 By default only the ticketing system is opened to the external API in OTRS.
 Please see my other github project, rails_otrs to download the latest OTRS modifictions so that this will work correctly.
 
