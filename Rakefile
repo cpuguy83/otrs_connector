@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "otrs_connector"
   gem.homepage = "http://github.com/cpuguy83/otrs_connector"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: Connects OTRS API to create tikets, manipulate CI's, etc.}
-  gem.description = %Q{TODO: Connect your RAILS app to OTRS/ITSM}
+  gem.summary = %Q{Connects OTRS API to create tikets, manipulate CI's, etc.}
+  gem.description = %Q{Connect your RAILS app to OTRS/ITSM}
   gem.email = "cpuguy83@gmail.com"
   gem.authors = ["Brian Goff"]
   # dependencies defined in Gemfile
