@@ -11,8 +11,8 @@ class OTRS
   @@otrs_api_url ||= "https://loalhost/otrs/json.pl"
   # Username / password combo should be an actual OTRS agent defined on the OTRS server
   # I have not tested this with other forms of OTRS authentication
-  @@otrs_user ||= admin
-  @@otrs_pass ||= admin
+  @@otrs_user ||= 'rails'
+  @@otrs_pass ||= 'rails'
   
   def self.user
     @@otrs_user

@@ -4,11 +4,29 @@ otrs_connector connects to the OTRS API, wich some modifications that opens up m
 By default only the ticketing system is opened to the external API in OTRS.
 Please see my other github project, rails_otrs to download the latest OTRS modifictions so that this will work correctly.
 
+otrs_connector only supports OTRS 3.0.x
+Support for 3.1.x is coming but is a major refactor (on both the OTRS API interface, which needs to be re-written and the main connector here).
 
-How to install:
+
+This gem makes extensive use of ActiveModel and ActiveSupport (json encoding/decoding).
+It is tested with both Rails 3.0.x and Rails 3.1.x and should work with 3.2.x
+
+===How to install
     gem install otrs_connector
 or Add to your gemfile:
     gem 'otrs_connector'
+
+
+===Configuration Options
+Put these in your environment configuration, change based on your setup:
+    OTRS.user = 'rails'
+    OTRS.password = 'rails'
+    OTRS.api_url = 'http://localhost/otrs/json.pl'
+    
+The username/password should be setup as agents in your OTRS setup.
+Make sure the agent has proper permissions to access what you need from the API.
+The API url is the custom API interface file described above.  This will change once 3.1 support is added
+
 
 == Contributing to otrs_connector
  
