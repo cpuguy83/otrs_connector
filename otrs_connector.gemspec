@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "otrs_connector"
-  s.version = "0.5.19"
+  s.version = "0.5.20"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Goff"]
@@ -25,23 +25,20 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "lib/otrs_connector.rb",
-    "lib/otrs_connector/change/state.rb",
-    "lib/otrs_connector/change/work_order.rb",
-    "lib/otrs_connector/config_item/definition.rb",
-    "lib/otrs_connector/config_item/deployment_state.rb",
-    "lib/otrs_connector/config_item/incident_state.rb",
     "lib/otrs_connector/otrs.rb",
     "lib/otrs_connector/otrs/change.rb",
+    "lib/otrs_connector/otrs/change/state.rb",
+    "lib/otrs_connector/otrs/change/work_order.rb",
     "lib/otrs_connector/otrs/config_item.rb",
     "lib/otrs_connector/otrs/general_catalog.rb",
     "lib/otrs_connector/otrs/link.rb",
     "lib/otrs_connector/otrs/relation.rb",
     "lib/otrs_connector/otrs/service.rb",
     "lib/otrs_connector/otrs/ticket.rb",
-    "lib/otrs_connector/ticket/article.rb",
-    "lib/otrs_connector/ticket/state.rb",
-    "lib/otrs_connector/ticket/ticket_queue.rb",
-    "lib/otrs_connector/ticket/type.rb",
+    "lib/otrs_connector/otrs/ticket/article.rb",
+    "lib/otrs_connector/otrs/ticket/state.rb",
+    "lib/otrs_connector/otrs/ticket/ticket_queue.rb",
+    "lib/otrs_connector/otrs/ticket/type.rb",
     "otrs_connector.gemspec",
     "test/helper.rb",
     "test/test_otrs_connector.rb"
@@ -57,14 +54,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<rails>, [">= 3.0.0"])
-      s.add_runtime_dependency(%q<require_all>, [">= 0"])
+      s.add_runtime_dependency(%q<require_all>, [">= 1.2"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_development_dependency(%q<bundler>, ["~> 1.1.1"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
     else
       s.add_dependency(%q<rails>, [">= 3.0.0"])
-      s.add_dependency(%q<require_all>, [">= 0"])
+      s.add_dependency(%q<require_all>, [">= 1.2"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_dependency(%q<bundler>, ["~> 1.1.1"])
@@ -72,7 +69,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<rails>, [">= 3.0.0"])
-    s.add_dependency(%q<require_all>, [">= 0"])
+    s.add_dependency(%q<require_all>, [">= 1.2"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
     s.add_dependency(%q<bundler>, ["~> 1.1.1"])
