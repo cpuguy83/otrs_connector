@@ -81,4 +81,4 @@ class OTRS
     self.class.connect(params)
   end
 end
-require_rel 'otrs'
+#require_rel 'otrs'

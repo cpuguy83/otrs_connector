@@ -1,1 +1,1 @@
-require 'otrs_connector/otrs'
+require_all 'lib/otrs_connector'
