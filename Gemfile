@@ -4,7 +4,7 @@ source "http://rubygems.org"
 #   gem "activesupport", ">= 2.3.5"
 
 gem 'rails', ">= 3.0.0"
-gem 'require_all'
+gem 'require_all', ">= 1.2"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
