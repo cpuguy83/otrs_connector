@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "otrs_connector"
-  s.version = "0.5.13"
+  s.version = "0.5.14"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Goff"]
@@ -24,24 +24,24 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
-    "lib/otrs/change.rb",
-    "lib/otrs/change/state.rb",
-    "lib/otrs/change/work_order.rb",
-    "lib/otrs/config_item.rb",
-    "lib/otrs/config_item/definition.rb",
-    "lib/otrs/config_item/deployment_state.rb",
-    "lib/otrs/config_item/incident_state.rb",
-    "lib/otrs/general_catalog.rb",
-    "lib/otrs/link.rb",
-    "lib/otrs/otrs.rb",
-    "lib/otrs/relation.rb",
-    "lib/otrs/service.rb",
-    "lib/otrs/ticket.rb",
-    "lib/otrs/ticket/article.rb",
-    "lib/otrs/ticket/state.rb",
-    "lib/otrs/ticket/ticket_queue.rb",
-    "lib/otrs/ticket/type.rb",
     "lib/otrs_connector.rb",
+    "lib/otrs_connector/change/state.rb",
+    "lib/otrs_connector/change/work_order.rb",
+    "lib/otrs_connector/config_item/definition.rb",
+    "lib/otrs_connector/config_item/deployment_state.rb",
+    "lib/otrs_connector/config_item/incident_state.rb",
+    "lib/otrs_connector/otrs.rb",
+    "lib/otrs_connector/otrs/change.rb",
+    "lib/otrs_connector/otrs/config_item.rb",
+    "lib/otrs_connector/otrs/general_catalog.rb",
+    "lib/otrs_connector/otrs/link.rb",
+    "lib/otrs_connector/otrs/relation.rb",
+    "lib/otrs_connector/otrs/service.rb",
+    "lib/otrs_connector/otrs/ticket.rb",
+    "lib/otrs_connector/ticket/article.rb",
+    "lib/otrs_connector/ticket/state.rb",
+    "lib/otrs_connector/ticket/ticket_queue.rb",
+    "lib/otrs_connector/ticket/type.rb",
     "otrs_connector.gemspec",
     "test/helper.rb",
     "test/test_otrs_connector.rb"
