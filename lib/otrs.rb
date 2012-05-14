@@ -1,4 +1,10 @@
-require_all 'otrs'
+require 'otrs/service'
+require 'otrs/change'
+require 'otrs/config_item'
+require 'otrs/otrs_general_catalog'
+require 'otrs/link'
+require 'otrs/relation'
+require 'otrs/ticket'
 module OTRS
   class OTRS
     include ActiveModel::Conversion
