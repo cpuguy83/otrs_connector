@@ -1,4 +1,4 @@
-require_all 'lib/otrs'
+require_all 'otrs'
 module OTRS
   class OTRS
     include ActiveModel::Conversion
