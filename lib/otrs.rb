@@ -1,4 +1,5 @@
 module OTRS
+  require_all 'lib/otrs'
   class OTRS
     include ActiveModel::Conversion
     include ActiveModel::Naming
