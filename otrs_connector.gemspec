@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "otrs_connector"
-  s.version = "0.5.12"
+  s.version = "0.5.13"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Goff"]
@@ -24,7 +24,6 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
-    "lib/otrs.rb",
     "lib/otrs/change.rb",
     "lib/otrs/change/state.rb",
     "lib/otrs/change/work_order.rb",
@@ -34,6 +33,7 @@ Gem::Specification.new do |s|
     "lib/otrs/config_item/incident_state.rb",
     "lib/otrs/general_catalog.rb",
     "lib/otrs/link.rb",
+    "lib/otrs/otrs.rb",
     "lib/otrs/relation.rb",
     "lib/otrs/service.rb",
     "lib/otrs/ticket.rb",
@@ -41,6 +41,7 @@ Gem::Specification.new do |s|
     "lib/otrs/ticket/state.rb",
     "lib/otrs/ticket/ticket_queue.rb",
     "lib/otrs/ticket/type.rb",
+    "lib/otrs_connector.rb",
     "otrs_connector.gemspec",
     "test/helper.rb",
     "test/test_otrs_connector.rb"
