@@ -1,6 +1,31 @@
 class OTRS::Relation < Array
   require 'will_paginate/array'
   
+  #attr_accessor :where_hash, :connect_params
+  #
+  #def where(opts_hash={}, *rest)
+  #  return self if opts_hash.blank?
+  #
+  #  relation = clone
+  #  relation.where_hash += opts_hash
+  #  relation
+  #end
+  #
+  #def initialize(opts)
+  #  self.send("where_hash=".to_sym, opts[:data])
+  #  self.send("connect_params=".to_sym, opts.except(:data))
+  #end
+  #
+  #def to_query
+  #  self.where_hash
+  #end
+  #
+  #
+  #def run_query
+  #  a = OTRS.connect(self.connect_params.merge(self.where_hash))
+  #  a.collect { |b| b.collect {|c| OTRS.object_preprocessor c }}
+  #end
+  
   def where(attributes)
     relation = self.class.new
     attributes.each do |lookup_key,lookup_value|
