@@ -81,10 +81,4 @@ class OTRS
     self.class.connect(params)
   end
 end
-require 'otrs_connector/otrs/service'
-require 'otrs_connector/otrs/change'
-require 'otrs_connector/otrs/config_item'
-require 'otrs_connector/otrs/general_catalog'
-require 'otrs_connector/otrs/link'
-require 'otrs_connector/otrs/relation'
-require 'otrs_connector/otrs/ticket'
+require_rel 'otrs'
