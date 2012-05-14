@@ -3,6 +3,7 @@ class OTRS
   include ActiveModel::Naming
   include ActiveModel::Validations
   extend ActiveModel::Callbacks
+  require File.dirname(__FILE__) + '/otrs'
   
   define_model_callbacks :create, :update, :save
 
