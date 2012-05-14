@@ -1,1 +1,1 @@
-require 'otrs/otrs'
+require 'otrs_connector/otrs'
