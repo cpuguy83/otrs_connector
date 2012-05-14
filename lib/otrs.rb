@@ -4,7 +4,6 @@ module OTRS
     include ActiveModel::Naming
     include ActiveModel::Validations
     extend ActiveModel::Callbacks
-    require_rel 'otrs'
   
     define_model_callbacks :create, :update, :save
 
