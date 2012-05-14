@@ -1,5 +1,4 @@
-class OTRS::Service# < OTRS
-  extend OTRS
+class OTRS::Service < OTRS
   attr_accessor :config_items, :tickets, :cur_inci_state, :valid_id, :service_id, :cur_inci_state_type, :type,
     :cur_inci_state, :create_by, :cur_inci_state_type_from_c_is, :change_time, :change_by, :create_time,
     :criticality, :comment, :criticality, :name_short, :type_id, :name, :parent_id, :cur_inci_state_id,
@@ -23,7 +22,7 @@ class OTRS::Service# < OTRS
   def self.find(id)
     data = { 'ServiceID' => id, 'UserID' => 1 }
     params = { :object => 'ServiceObject', :method => 'ServiceGet', :data => data }
-    self.object_preprocessor connect(params)
+    self.object_preprocessor self.connect(params)
   end
     
   def attributes
