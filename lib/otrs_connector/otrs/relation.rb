@@ -1,4 +1,8 @@
 class OTRS::Relation < Array
+  # OTRS::Relation is my attempt at making something similar to ActiveRecord::Relation
+  # There is still a lot to do here.
+  # Right now where chains don't work as AR does, the first in the chain connects to OTRS, the rest of the chained items are parsing through the returned objects... somtimes this is faster, but the more objects get returned the slower it will be.
+  
   require 'will_paginate/array'
   
   #attr_accessor :where_hash, :connect_params
@@ -26,6 +30,7 @@ class OTRS::Relation < Array
   #  a.collect { |b| b.collect {|c| OTRS.object_preprocessor c }}
   #end
   
+  # Allows chaining where methods, this method only parses the already returned objects from OTRS, currently.  In the future I hope to have this grouping the where chains together into one OTRS request for all in the chain
   def where(attributes)
     relation = self.class.new
     attributes.each do |lookup_key,lookup_value|
@@ -44,6 +49,7 @@ class OTRS::Relation < Array
     self[0...int]
   end
   
+  # This is hit and miss for some reason... sometimes the order works correctly, sometimes it's backwards (desc/asc)
   def order(field='id',order='desc')
     case order.downcase.to_s
     when 'asc'
@@ -53,6 +59,7 @@ class OTRS::Relation < Array
     end
   end
   
+  # Removes duplicate records
   def uniqify
     ids = []
     results = self.class.new

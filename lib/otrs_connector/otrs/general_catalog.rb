@@ -1,4 +1,6 @@
 class OTRS::GeneralCatalog < OTRS
+  # Really recommend reading OTRS API Documentation for the GeneralCatalog
+  
   attr_accessor :name, :change_time, :change_by, :valid_id, :create_time, :item_id, :comment, :create_by
   def self.set_accessor(key)
     attr_accessor key.to_sym

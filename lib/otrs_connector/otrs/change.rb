@@ -18,27 +18,11 @@ class OTRS::Change < OTRS
   :change_free_text13, :change_free_key31, :accounted_time, :priority_id,
   :change_free_key40, :change_free_text4, :change_free_key4, :change_free_key26,
   :change_free_key42, :change_free_key23, :change_free_key30, :change_free_key36,
-  :planned_end_time,
-  :change_free_key49,
-  :change_free_key32,
-  :change_free_text48,
-  :change_free_text28,
-  :work_order_i_ds,
-  :change_free_key20,
-  :change_free_text14,
-  :change_free_key29,
-  :change_free_text7,
-  :change_free_text27,
-  :change_free_text18,
-  :change_number,
-  :planned_effort,
-  :change_free_key37,
-  :change_free_text11,
-  :justification,
-  :impact,
-  :change_free_key41,
-  :change_free_text22,
-  :change_free_key10,
+  :planned_end_time, :change_free_key49, :change_free_key32, :change_free_text48,
+  :change_free_text28, :work_order_i_ds, :change_free_key20, :change_free_text14,
+  :change_free_key29, :change_free_text7, :change_free_text27, :change_free_text18,
+  :change_number, :planned_effort, :change_free_key37, :change_free_text11, :justification,
+  :impact, :change_free_key41, :change_free_text22, :change_free_key10,
   :change_free_key19,
   :create_by,
   :change_free_text50,
@@ -82,11 +66,6 @@ class OTRS::Change < OTRS
   :change_free_text32,
   :description
   
-  
-  #def self.set_accessor(key)
-  #  attr_accessor key.to_sym
-  #end
-  
   def persisted?
     false
   end
@@ -96,14 +75,6 @@ class OTRS::Change < OTRS
       #self.class.set_accessor(name.to_s.underscore)
       send("#{name.to_s.underscore.to_sym}=", value)
     end
-  end
-  
-  def attributes
-    attributes = {}
-    self.instance_variables.each do |v|
-      attributes[v.to_s.gsub('@','').to_sym] = self.instance_variable_get(v)
-    end
-    attributes
   end
   
   def save

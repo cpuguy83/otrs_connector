@@ -14,15 +14,7 @@ class OTRS::Link < OTRS
       send("#{name.to_s.underscore.to_sym}=", value)
     end
   end
-  
-  def attributes
-    attributes = {}
-    self.instance_variables.each do |v|
-      attributes[v.to_s.gsub('@','').to_sym] = self.instance_variable_get(v)
-    end
-    attributes
-  end
-  
+
   def save
     self.class.create(self.attributes)
   end
@@ -51,9 +43,10 @@ class OTRS::Link < OTRS
     end
   end
   
+  
+  # Returns list of link objects as Source => Target
+  # Haven't decided if I want this to return the link object or what is being linked to
   def self.where(attributes)
-    # Returns list of link objects as Source => Target
-    # Haven't decided if I want this to return the link object or what is being linked to
     attributes[:state] ||= 'Valid'
     tmp = {}
     attributes.each do |key,value|

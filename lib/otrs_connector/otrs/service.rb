@@ -3,10 +3,6 @@ class OTRS::Service < OTRS
     :cur_inci_state, :create_by, :cur_inci_state_type_from_c_is, :change_time, :change_by, :create_time,
     :criticality, :comment, :criticality, :name_short, :type_id, :name, :parent_id, :cur_inci_state_id,
     :criticality_id
-
-  #def self.set_accessor(key)
-  #  attr_accessor key.to_sym
-  #end
   
   def persisted?
     false
@@ -14,7 +10,6 @@ class OTRS::Service < OTRS
   
   def initialize(attributes = {})
     attributes.each do |name, value|
-      #self.class.set_accessor(name.to_s.underscore)
       send("#{name.to_s.underscore.to_sym}=", value)
     end
   end
@@ -23,14 +18,6 @@ class OTRS::Service < OTRS
     data = { 'ServiceID' => id, 'UserID' => 1 }
     params = { :object => 'ServiceObject', :method => 'ServiceGet', :data => data }
     self.object_preprocessor self.connect(params)
-  end
-    
-  def attributes
-    attributes = {}
-    self.instance_variables.each do |v|
-      attributes[v.to_s.gsub('@','').to_sym] = self.instance_variable_get(v)
-    end
-    attributes
   end
   
   def save

@@ -1,16 +1,21 @@
 class OTRS
+  # This class is mostly used for inheritance purposes
+  # All subclasses will be able to directly connect to OTRS
+  # All subclasses have active_record style callbacks
+  
+  # Include stuff for calbacks, validations
   include ActiveModel::Conversion
   include ActiveModel::Naming
   include ActiveModel::Validations
   extend ActiveModel::Callbacks
 
+  # Create callbacks on before/after create/save/update
   define_model_callbacks :create, :update, :save
 
-  # @@otrs_host is the address where the OTRS server presides
   # api_url is the base URL used to connect to the json api of OTRS, this will be the custom json.pl as the standard doesn't include ITSM module
   @@otrs_api_url ||= "https://loalhost/otrs/json.pl"
+  
   # Username / password combo should be an actual OTRS agent defined on the OTRS server
-  # I have not tested this with other forms of OTRS authentication
   @@otrs_user ||= 'rails'
   @@otrs_pass ||= 'rails'
 
@@ -35,6 +40,7 @@ class OTRS
     @@otrs_api_url = url
   end
 
+  # Convert object's instance variables to a hash
   def attributes
     attributes = {}
     self.instance_variables.each do |v|
@@ -43,17 +49,22 @@ class OTRS
     attributes
   end
 
+  # Handles communication with OTRS
   def self.connect(params)
     require 'net/https'
     base_url = self.api_url
+    
+    # Build request URL
     logon = URI.encode("User=#{self.user}&Password=#{self.password}")
     object = URI.encode(params[:object])
     method = URI.encode(params[:method])
     data = params[:data].to_json
     data = URI.encode(data)
+    # Had some issues with certain characters not being escaped properly and causing JSON issues
     data = URI.escape(data, '=\',\\/+-&?#.;')
     uri = URI.parse("#{base_url}?#{logon}&Object=#{object}&Method=#{method}&Data=#{data}")
-  
+    
+    # Connect to OTRS
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -67,6 +78,8 @@ class OTRS
     end
   end
 
+  # Base method for processing objects returned by OTRS into Ruby objects
+  # This works in most cases, but not all, namely with OTRS::ConfigItem due to extra attributes
   def self.object_preprocessor(object)
     unless object.empty? or object.nil?
       a = Hash[*object]
@@ -76,9 +89,8 @@ class OTRS
     end
   end
 
-
+  # Not sure why this is here
   def connect(params)
     self.class.connect(params)
   end
 end
-#require_rel 'otrs'

@@ -1,5 +1,7 @@
 class OTRS::ConfigItem < OTRS
+  # I did not convert fields in this classes to underscores because of the wide range of names possible in the OTRS's custom fields for ConfigItems.  In attempting to do so I kept running into issues, even in just our setup, so to KISS I'm just pulling in the fields directly
   
+  # Field Names that are part of all ConfigItem objects, not stored in XMLData table
   @@builtin_fields = [:Name,:DeplStateID,:InciStateID,:DefinitionID,
       :CreateTime,:ChangeBy,:ChangeTime,:Class,:ClassID,:ConfigItemID,:CreateBy,:CreateTime,
       :CurDeplState,:CurDeplStateID,:CurDeplStateType,:CurInciState,:CurInciStateID,:CurInciStateType,
@@ -28,14 +30,6 @@ class OTRS::ConfigItem < OTRS
     end
   end
   
-  def attributes
-    attributes = {}
-    self.instance_variables.each do |v|
-      attributes[v.to_s.gsub('@','').to_sym] = self.instance_variable_get(v)
-    end
-    attributes
-  end
-  
   def save
     self.create
   end
@@ -59,6 +53,7 @@ class OTRS::ConfigItem < OTRS
     config_item
   end
   
+  # Converts search hash for search itmes that ar enot the in @@builtin_fields to OTRS XMLData searches
   def self.xml_search(attributes)
     what = []
     attributes.each do |key,value|
@@ -69,6 +64,7 @@ class OTRS::ConfigItem < OTRS
     what
   end
   
+  # Custom object processor because of XMLData
   def self.object_preprocessor(object)
     unless object.nil? or object.empty?
       xml = self.from_otrs_xml(object['XMLData'])
@@ -78,12 +74,14 @@ class OTRS::ConfigItem < OTRS
     end
   end
   
+  # Find by ConfigItemID
   def self.find(id)
     data = { 'ConfigItemID' => id, 'XMLDataGet' => 1 }
     params = { :object => 'ConfigItemObjectCustom', :method => 'VersionGet', :data => data }
     self.object_preprocessor (connect(params).first)
   end
   
+  # Find by Version ID
   def self.find_version(id)
     data = { 'VersionID' => id, 'XMLDataGet' => 1 }
     params = { :object => 'ConfigItemObject', :method => 'VersionGet', :data => data }
@@ -110,6 +108,7 @@ class OTRS::ConfigItem < OTRS
     results
   end
   
+  # Get history of CI object, returns as CI's... may want to create a new class, subclassed from this one called ConfigItemHistoryEntry, or some such, but this works for now.
   def get_history
     data = { :ConfigItemID => self.id, 'XMLDataGet' => 1 }
     params = { :object => 'ConfigItemObjectCustom', :method => 'VersionList', :data => data }
@@ -121,6 +120,8 @@ class OTRS::ConfigItem < OTRS
     return b
   end
   
+  
+  # Convert non-builtin fields to OTRS's XMLData structure
   def self.to_otrs_xml(attributes)
     xml = attributes.except(:Name,:DeplStateID,:InciStateID,:DefinitionID,
       :CreateTime,:ChangeBy,:ChangeTime,:Class,:ClassID,:ConfigItemID,:CreateBy,:CreateTime,
@@ -136,6 +137,7 @@ class OTRS::ConfigItem < OTRS
     # Order keys properly so they are parsed in the correct order
     tmp.sort! { |x,y| x <=> y }
     tmp.each do |key|
+      # In some cases we created special field names because there were multiple fields with the same name.  Fields with the "__" are these special fields and need to be handled specially
       keys = key.split(/__/)
       xml_key = keys[0]
       unless keys[1].nil? then tag_key = keys[1].gsub(/^0/,'').to_i + 1 end
@@ -192,7 +194,10 @@ class OTRS::ConfigItem < OTRS
     config_item
   end
   
+  
+  # Convert OTRS XMLData structure to our object structure
   def self.from_otrs_xml(xml)
+    # OTRS Allows multiples of the same field name.  To handle this, and to make sure we pull all the fields these fields are being handled specially.  Fields with __keyname__count are these fields
     xml = xml[1].flatten[1][1].except("TagKey")
     data = {}
     xml.each do |key,value|
@@ -234,11 +239,5 @@ class OTRS::ConfigItem < OTRS
     end
     data
   end
-  
-  #def self.from_otrs_xml(xml)
-  #  data = { :XMLHash => xml }
-  #  params = { :object => 'XMLObject', :method => 'XMLHash2D', :data => data }
-  #  a = Hash[*(self.connect(params))]
-  #end
   
 end
