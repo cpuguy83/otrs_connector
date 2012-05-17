@@ -125,11 +125,11 @@ class OTRS::Ticket < OTRS
     data = {:UserID => 1, :Type => 'TicketFreeText' + id.to_s}
     params = { :object => 'TicketObject', :method => 'TicketFreeTextGet', :data => data }
     a = self.connect(params).first
-    b = []
-    a.each do |key,value|
-      b << [value,key]
-    end
-    return b
+    #b = []
+    #a.each do |key,value|
+    #  b << [value,key]
+    #end
+    #return b
   end
   
   def set_free_text_field(id, key, value)
