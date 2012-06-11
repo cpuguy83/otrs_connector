@@ -1,5 +1,5 @@
 require 'rubygems'
 require 'require_all'
-require 'active_support/JSON'
+require 'active_support/json'
 require 'active_model'
 require_rel 'otrs_connector'
