@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "otrs_connector"
-  s.version = "1.0.2"
+  s.version = "1.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Goff"]
-  s.date = "2012-05-15"
+  s.date = "2012-06-11"
   s.description = "Connect your RAILS app to OTRS/ITSM"
   s.email = "cpuguy83@gmail.com"
   s.extra_rdoc_files = [
@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/cpuguy83/otrs_connector"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.23"
+  s.rubygems_version = "1.8.24"
   s.summary = "Connects OTRS API to create tikets, manipulate CI's, etc."
 
   if s.respond_to? :specification_version then
