@@ -99,7 +99,7 @@ class OTRS
     response = self.get_from_remote(uri, timeout)
     rescue EOFError
       retry_counter += 1
-      puts "EOFError, Attempt: #{counter+1}"
+      puts "EOFError, Attempt: #{retry_counter+1}"
       retry if retry_counter < retries
       raise EOFError if retry_counter >= retries
 
