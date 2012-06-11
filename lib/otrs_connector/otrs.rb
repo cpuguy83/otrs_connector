@@ -50,14 +50,15 @@ class OTRS
   end
 
   # Handles communication with OTRS
-  def self.connect(params)
+  
+  def self.setup_connection_params(params)
     if self.api_url =~ /^https/
       require 'net/https'
     else
       require 'net/http'
     end
-    base_url = self.api_url
     
+    base_url = self.api_url
     # Build request URL
     logon = URI.encode("User=#{self.user}&Password=#{self.password}")
     object = URI.encode(params[:object])
@@ -66,22 +67,41 @@ class OTRS
     data = URI.encode(data)
     # Had some issues with certain characters not being escaped properly and causing JSON issues
     data = URI.escape(data, '=\',\\/+-&?#.;')
-    uri = URI.parse("#{base_url}?#{logon}&Object=#{object}&Method=#{method}&Data=#{data}")
-    
-    # Connect to OTRS
+    URI.parse("#{base_url}?#{logon}&Object=#{object}&Method=#{method}&Data=#{data}")
+  end
+  
+  def self.get_from_remote(uri, read_timeout=60)
     http = Net::HTTP.new(uri.host, uri.port)
+    http.read_timeout = read_timeout
     if self.api_url =~ /^https/
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
     request = Net::HTTP::Get.new(uri.request_uri)
     response = http.request(request)
+  end
+  
+  def self.process_response(response)
     result = ActiveSupport::JSON::decode(response.body)
     if result["Result"] == 'successful'
-      result["Data"]
+      return result["Data"]
     else
       raise "Error:#{result["Result"]} #{result["Data"]}"
     end
+  end
+  
+  
+  def self.connect(params)
+    uri = self.setup_connection_params(params)
+    
+    # Connect to OTRS
+    begin
+    response = self.get_from_remote(uri)
+    rescue Timeout::Error
+      response = self.get_from_remote(uri,120)
+      return self.process_response(response)
+    end
+    return self.process_response(response)
   end
 
   # Base method for processing objects returned by OTRS into Ruby objects
