@@ -91,15 +91,24 @@ class OTRS
   end
   
   
-  def self.connect(params)
+  def self.connect(params, timeout=60, retries=4)
     uri = self.setup_connection_params(params)
-    
+    retry_counter = 0
     # Connect to OTRS
     begin
-    response = self.get_from_remote(uri)
+    response = self.get_from_remote(uri, timeout)
+    rescue EOFError
+      retry_counter += 1
+      puts "EOFError, Attempt: #{counter+1}"
+      retry if retry_counter < retries
+      raise EOFError if retry_counter >= retries
+
     rescue Timeout::Error
-      response = self.get_from_remote(uri,120)
-      return self.process_response(response)
+      retry_counter += 1
+      timeout = timeout*1.5
+      puts "Timeout::Error Attempt: #{retry_counter+1}, Timeout #{timeout}"
+      retry if retry_counter < retries
+      raise Timeout::Error if retry_counter >= retries
     end
     return self.process_response(response)
   end
