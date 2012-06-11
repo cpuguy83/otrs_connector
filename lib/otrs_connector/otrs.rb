@@ -51,7 +51,11 @@ class OTRS
 
   # Handles communication with OTRS
   def self.connect(params)
-    require 'net/https'
+    if self.api_url =~ /^https/
+      require 'net/https'
+    else
+      require 'net/http'
+    end
     base_url = self.api_url
     
     # Build request URL
@@ -66,8 +70,10 @@ class OTRS
     
     # Connect to OTRS
     http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    if self.api_url =~ /^https/
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    end
     request = Net::HTTP::Get.new(uri.request_uri)
     response = http.request(request)
     result = ActiveSupport::JSON::decode(response.body)
