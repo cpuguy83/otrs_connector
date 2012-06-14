@@ -70,10 +70,12 @@ class OTRS::GeneralCatalog < OTRS
     self.superclass::Relation.new(b)
   end
   
-  def self.class_list
+  # Name variable filters the full classlist down so you can get just what you wanted
+  def self.class_list(name='')
     data = { }
     params = { :object => 'GeneralCatalogObject', :method => 'ClassList', :data => data }
-    a = connect(params).first
+    items = connect(params).first
+    items.collect{ |i| i if i[name] }.compact
   end
   
 end
