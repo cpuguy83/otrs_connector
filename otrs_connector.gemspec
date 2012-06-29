@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "otrs_connector"
-  s.version = "1.1.3"
+  s.version = "1.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Goff"]
-  s.date = "2012-06-14"
+  s.date = "2012-06-29"
   s.description = "Connect your RAILS app to OTRS/ITSM"
   s.email = "cpuguy83@gmail.com"
   s.extra_rdoc_files = [
