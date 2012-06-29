@@ -31,7 +31,9 @@ class OTRS::ConfigItem < OTRS
   end
   
   def save
-    self.create
+    run_callbacks :save do
+      self.create
+    end
   end
   
   def create
@@ -78,14 +80,20 @@ class OTRS::ConfigItem < OTRS
   def self.find(id)
     data = { 'ConfigItemID' => id, 'XMLDataGet' => 1 }
     params = { :object => 'ConfigItemObjectCustom', :method => 'VersionGet', :data => data }
-    self.object_preprocessor (connect(params).first)
+    object = self.object_preprocessor (connect(params).first)
+    object.run_callbacks :find do
+      object
+    end
   end
   
   # Find by Version ID
   def self.find_version(id)
     data = { 'VersionID' => id, 'XMLDataGet' => 1 }
     params = { :object => 'ConfigItemObject', :method => 'VersionGet', :data => data }
-    return self.object_preprocessor (connect(params).first)
+    object = self.object_preprocessor (connect(params).first)
+    object.run_callbacks :find do
+      object
+    end
   end
   
   def self.where(attributes)
@@ -166,32 +174,34 @@ class OTRS::ConfigItem < OTRS
   end
   
   def update_attributes(updated_attributes)
-    self.attributes.each do |key,value|
-      if updated_attributes[key].nil?
-        updated_attributes[key] = value
+    run_callbacks :update do
+      self.attributes.each do |key,value|
+        if updated_attributes[key].nil?
+          updated_attributes[key] = value
+        end
       end
+      updated_attributes[:XMLData] = self.class.to_otrs_xml(updated_attributes)
+      xml_attributes = self.attributes.except(:Name,:DeplStateID,:InciStateID,:DefinitionID,
+        :CreateTime,:ChangeBy,:ChangeTime,:Class,:ClassID,:ConfigItemID,:CreateBy,:CreateTime,
+        :CurDeplState,:CurDeplStateID,:CurDeplStateType,:CurInciState,:CurInciStateID,:CurInciStateType,
+        :DeplState,:DeplStateType,:InciState,:InciStateType,:LastVersionID,:Number,:VersionID)
+      xml_attributes.each do |key,value|
+        updated_attributes = updated_attributes.except(key)
+      end
+      data = updated_attributes
+      params = { :object => 'ConfigItemObject', :method => 'VersionAdd', :data => data }
+      a = self.class.connect(params)
+      new_version_id = a.first
+      data2 = { 'VersionID' => new_version_id }
+      params2 = { :object => 'ConfigItemObject', :method => 'VersionConfigItemIDGet', :data => data2 }
+      b = self.class.connect(params2)
+      config_item = self.class.find(b.first)
+      attributes = config_item.attributes
+      attributes.each do |key,value|
+        instance_variable_set "@#{key.to_s}", value
+      end
+      config_item
     end
-    updated_attributes[:XMLData] = self.class.to_otrs_xml(updated_attributes)
-    xml_attributes = self.attributes.except(:Name,:DeplStateID,:InciStateID,:DefinitionID,
-      :CreateTime,:ChangeBy,:ChangeTime,:Class,:ClassID,:ConfigItemID,:CreateBy,:CreateTime,
-      :CurDeplState,:CurDeplStateID,:CurDeplStateType,:CurInciState,:CurInciStateID,:CurInciStateType,
-      :DeplState,:DeplStateType,:InciState,:InciStateType,:LastVersionID,:Number,:VersionID)
-    xml_attributes.each do |key,value|
-      updated_attributes = updated_attributes.except(key)
-    end
-    data = updated_attributes
-    params = { :object => 'ConfigItemObject', :method => 'VersionAdd', :data => data }
-    a = self.class.connect(params)
-    new_version_id = a.first
-    data2 = { 'VersionID' => new_version_id }
-    params2 = { :object => 'ConfigItemObject', :method => 'VersionConfigItemIDGet', :data => data2 }
-    b = self.class.connect(params2)
-    config_item = self.class.find(b.first)
-    attributes = config_item.attributes
-    attributes.each do |key,value|
-      instance_variable_set "@#{key.to_s}", value
-    end
-    config_item
   end
   
   

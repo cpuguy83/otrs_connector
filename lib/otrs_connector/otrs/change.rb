@@ -74,7 +74,9 @@ class OTRS::Change < OTRS
   end
   
   def save
-    self.create(self.attributes)
+    run_callbacks :save do
+      self.create(self.attributes)
+    end
   end
   
   def create(attributes)
@@ -98,7 +100,10 @@ class OTRS::Change < OTRS
   def self.find(id)
     data = { 'ChangeID' => id, 'UserID' => 1 }
     params = { :object => 'ChangeObject', :method => 'ChangeGet', :data => data }
-    self.object_preprocessor connect(params)
+    object = self.object_preprocessor connect(params)
+    object.run_callbacks :find do
+      object
+    end
   end
   
     

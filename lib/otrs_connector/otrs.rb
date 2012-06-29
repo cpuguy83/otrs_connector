@@ -10,7 +10,7 @@ class OTRS
   extend ActiveModel::Callbacks
 
   # Create callbacks on before/after create/save/update
-  define_model_callbacks :create, :update, :save
+  define_model_callbacks :update, :save, :find
 
   # api_url is the base URL used to connect to the json api of OTRS, this will be the custom json.pl as the standard doesn't include ITSM module
   @@otrs_api_url ||= "https://loalhost/otrs/json.pl"

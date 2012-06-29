@@ -172,25 +172,30 @@ class OTRS::Change::WorkOrder < OTRS
   end
   
   def update_attributes(attributes)
-    tmp = {}
-    attributes.each do |key,value|
-      tmp[key.to_s.camelize] = value      #Copies ruby style keys to camel case for OTRS
-    end
-    tmp['WorkOrderID'] = @work_order_id
-    data = tmp
-    params = { :object => 'WorkOrderObject', :method => 'WorkOrderUpdate', :data => data }
-    a = connect(params)
-    if a.first.nil?
-      nil
-    else
-      return self
+    run_callbacks :update do
+      tmp = {}
+      attributes.each do |key,value|
+        tmp[key.to_s.camelize] = value      #Copies ruby style keys to camel case for OTRS
+      end
+      tmp['WorkOrderID'] = @work_order_id
+      data = tmp
+      params = { :object => 'WorkOrderObject', :method => 'WorkOrderUpdate', :data => data }
+      a = connect(params)
+      if a.first.nil?
+        nil
+      else
+        return self
+      end
     end
   end
   
   def self.find(id)
     data = { 'WorkOrderID' => id, 'UserID' => 1 }
     params = { :object => 'WorkOrderObject', :method => 'WorkOrderGet', :data => data }
-    self.object_preprocessor connect(params)
+    object = self.object_preprocessor connect(params)
+    object.run_callbacks :find do
+      object
+    end
   end
   
   def destroy

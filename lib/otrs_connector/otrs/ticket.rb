@@ -43,7 +43,9 @@ class OTRS::Ticket < OTRS
   end
   
   def save
-    self.create(self.attributes)
+    run_callbacks :save do
+      self.create(self.attributes)
+    end
   end
   
   def create(attributes)
@@ -104,7 +106,10 @@ class OTRS::Ticket < OTRS
   def self.find(id)
     data = { 'TicketID' => id, 'UserID' => 1 }
     params = { :object => 'TicketObject', :method => 'TicketGet', :data => data }
-    self.object_preprocessor(connect(params))
+    object = self.object_preprocessor(connect(params))
+    object.run_callbacks :find do
+      object
+    end
   end
   
   

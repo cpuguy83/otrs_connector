@@ -17,11 +17,16 @@ class OTRS::Service < OTRS
   def self.find(id)
     data = { 'ServiceID' => id, 'UserID' => 1 }
     params = { :object => 'ServiceObject', :method => 'ServiceGet', :data => data }
-    self.object_preprocessor self.connect(params)
+    object = self.object_preprocessor self.connect(params)
+    object.run_callbacks :find do
+      object
+    end
   end
   
   def save
-    self.create(self.attributes)
+    run_callbacks :save do
+      self.create(self.attributes)
+    end
   end
   
   def create(attributes)
