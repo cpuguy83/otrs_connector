@@ -97,6 +97,7 @@ class OTRS
     # Connect to OTRS
     begin
     response = self.get_from_remote(uri, timeout)
+    
     rescue EOFError
       retry_counter += 1
       puts "EOFError, Attempt: #{retry_counter+1}"
@@ -109,6 +110,14 @@ class OTRS
       puts "Timeout::Error Attempt: #{retry_counter+1}, Timeout #{timeout}"
       retry if retry_counter < retries
       raise Timeout::Error if retry_counter >= retries
+      
+      
+    rescue RuntimeError
+      retry_counter += 1
+      puts "Request failed, retrying. Attempt: #{retry_counter+1}"
+      retry if retry_counter < retries
+      raise RuntimeError if retry_counter >= retries
+      
     end
     return self.process_response(response)
   end
