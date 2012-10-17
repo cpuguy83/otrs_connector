@@ -5,7 +5,7 @@ source "http://rubygems.org"
 
 
 gem 'activesupport',  ">= 3.0.0"
-gem 'require_all', ">= 1.2"
+#gem 'require_all', ">= 1.2"
 gem 'activemodel', ">= 3.0.0"
 gem 'active_attr'
 gem 'savon'

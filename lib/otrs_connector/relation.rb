@@ -1,9 +1,9 @@
-class OTRS::Relation < Array
+class OTRSConnector::Relation < Array
   # OTRS::Relation is my attempt at making something similar to ActiveRecord::Relation
   # There is still a lot to do here.
   # Right now where chains don't work as AR does, the first in the chain connects to OTRS, the rest of the chained items are parsing through the returned objects... somtimes this is faster, but the more objects get returned the slower it will be.
   
-  require 'will_paginate/array'
+  #require 'will_paginate/array'
   
   #attr_accessor :where_hash, :connect_params
   #

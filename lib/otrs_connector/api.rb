@@ -1,5 +1,6 @@
 module OTRSConnector
   module API
-    require "#{OTRSConnector.root}/lib/otrs_connector/api/generic_interface"
+    mattr_accessor :login_user, :login_password
   end
 end
+require_relative 'api/generic_interface'
