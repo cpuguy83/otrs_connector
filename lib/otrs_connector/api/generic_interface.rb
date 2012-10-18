@@ -62,3 +62,4 @@ end
 
 require_relative 'generic_interface/session'
 require_relative 'generic_interface/ticket'
+require_relative 'generic_interface/query'
