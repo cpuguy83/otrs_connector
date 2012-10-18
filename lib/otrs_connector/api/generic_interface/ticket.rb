@@ -66,7 +66,7 @@ module OTRSConnector
             else
               set_value = 0
             end
-          
+            # Sets extra options from API for pulling dynamic fields, articles, extended info, and attachments
             case key
             when :dynamic_fields
               new_options['DynamicFields'] = set_value
@@ -81,12 +81,17 @@ module OTRSConnector
           new_options['TicketID'] = id
           response = self.connect('TicketGet', new_options)[:ticket]
           response[:id] = response[:ticket_id]
+          
+          # Get dynamic fields if any were sent back
           dynamic_fields = build_dynamic_fields_from_ticket_hash(response)
+          
+          # Article instance gets created separately
           ticket = new response.except(:article)
           ticket.articles = response[:article].collect do |a| 
             a[:id] = a[:article_id]
             Article.new a
           end
+          
           ticket.dynamic_fields = dynamic_fields if dynamic_fields.any?
           ticket
         end
@@ -105,6 +110,8 @@ module OTRSConnector
         end
         
         # Pass in an extra_options hash to supply your own history_type and history_comment
+        # In order to create a ticket you must pass in an Article instnace inside an array to ticket.articles !!There can be only 1!!
+        # If you want to include Dynamic fields, you must add to ticket.dynamic_fields an array of DynamicField instances
         def save(extra_options={})
           a = articles.first
           
@@ -147,6 +154,7 @@ module OTRSConnector
             'DynamicField' => new_dynamic_fields
           }
           response = self.class.connect 'TicketCreate', options
+          # Pull the full new record from OTRS so we can have an ID
           self.attributes = self.class.find(response[:ticket_id], dynamic_fields: true, articles: true).attributes
           self
         end

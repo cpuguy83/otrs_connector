@@ -2,14 +2,8 @@
 
 otrs_connector connects to the OTRS API, with some modifications that opens up more of the OTRS/ITSM internals.
 By default only the ticketing system is opened to the external API in OTRS.
-Please see my other github project, rails_otrs to download the latest OTRS modifictions so that this will work correctly.
 
-otrs_connector only supports OTRS 3.0.x
-Support for 3.1.x is coming but is a major refactor (on both the OTRS API interface, which needs to be re-written and the main connector here).
-
-
-This gem makes extensive use of ActiveModel and ActiveSupport (json encoding/decoding).
-It is tested with both Rails 3.0.x and Rails 3.1.x and should work with 3.2.x
+OTRS plugin modules will be provided in the vendor folder for CRUD operations on ITSM objects
 
 ===How to install
     gem install otrs_connector
@@ -17,11 +11,21 @@ or Add to your gemfile:
     gem 'otrs_connector'
 
 
+=== Deprication Notice
+otrs_connector v1.x uses the iPhoneHandle module from OTRS to handle communication
+iPhoneHandle is being deprecated in OTRS, and as such here
+All previous class/methods have been moved to OTRSConnector::API::IPhoneHandle
+
+otrs_connector v2.x uses the new "GenericInterface" provided by OTRS
+
+Namespace OTRS has been changed to OTRSConnector (as it should have been to begin with, doh!)
+
 ===Configuration Options
 Put these in your environment configuration, change based on your setup:
-    OTRS.user = 'rails'
-    OTRS.password = 'rails'
-    OTRS.api_url = 'http://localhost/otrs/json.pl'
+    OTRSConnector::API.user = 'rails'
+    OTRSConnector::API.password = 'rails'
+    OTRSConnector::API::GenericInterface.default_wsdl = 'path/to/wsdl'
+    OTRSConnector::API::GenericInterface.default_wsdl_endpoint = http://url/to/webservice
     
 The username/password should be setup as agents in your OTRS setup.
 Make sure the agent has proper permissions to access what you need from the API.
@@ -32,6 +36,7 @@ The API url is the custom API interface file described above.  This will change 
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
+* Work for chnages related to OTRS 3.1 are in the otrs31 branch
 * Fork the project.
 * Start a feature/bugfix branch.
 * Commit and push until you are happy with your contribution.

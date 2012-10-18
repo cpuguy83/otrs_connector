@@ -3,6 +3,7 @@ module OTRSConnector
     module GenericInterface
       mattr_accessor :session_id, :default_wsdl_endpoint, :default_wsdl
       self.default_wsdl = "#{OTRSConnector.root}/vendor/otrs.ticket.wsdl"
+      
       def self.included(base)
         base.extend(ClassMethods)
         base.class_eval do
@@ -21,6 +22,7 @@ module OTRSConnector
         
       end
       
+      # Redefine initialize to add callback
       def intialize(attributes={})
         run_callbacks :initialize do
           initialize_from_active_attr(attributes)
@@ -39,6 +41,7 @@ module OTRSConnector
       module ClassMethods
         attr_accessor :wsdl, :wsdl_endpoint
         
+        # Generic handler for actual communication with OTRS
         def connect(method, options)
           client.wsdl.document = self.wsdl
           client.wsdl.endpoint = self.wsdl_endpoint
