@@ -6,11 +6,11 @@ module OTRSConnector
         
         class << self
           # Create some extra instance class instance accessors for create/update methods
-          attr_accessor :default_history_type, :default_history_comment
+          attr_accessor :default_history_type, :default_history_comment, :search_method
         end
         self.wsdl = OTRSConnector::API::GenericInterface.default_wsdl
         self.wsdl_endpoint = OTRSConnector::API::GenericInterface.default_wsdl_endpoint
-        
+        self.search_method = 'TicketSearch'
         actions 'TicketGet', 'TicketCreate', 'TicketUpdate', 'TicketSearch'
         
         attribute :id, type: Integer
@@ -193,8 +193,10 @@ module OTRSConnector
           self.attributes = updated_ticket.attributes
           true
         end
-        
-        
+
+        def self.where(attributes)
+          Query.new(self).where(attributes)
+        end
       end
     end
   end
