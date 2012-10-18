@@ -3,7 +3,9 @@ module OTRSConnector
     module GenericInterface
       class Ticket
         class DynamicField
-          
+          include ActiveAttr::Model
+          attribute :name
+          attribute :value
         end
       end
     end
