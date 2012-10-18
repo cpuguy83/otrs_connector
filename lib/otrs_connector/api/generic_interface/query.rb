@@ -1,6 +1,9 @@
 module OTRSConnector
   module API
     module GenericInterface
+      # Proxy class for searching.  Allows method chaining with searches similar to ActiveRecord::Reation.
+      # Waits until objects are actually needed before sending request to OTRS
+      # Essentially takes all query options in line before performing the lookup
       class Query
         include Enumerable
         def initialize(model)
@@ -26,11 +29,21 @@ module OTRSConnector
           self
         end
         
-        def sort(field)
-          @where[:sort_by] = field.to_s.camelize
+        def limit(number)
+          @where[:limit] = number
           self
         end
         
+        def sort(*fields)
+          if fields.count == 1
+            @where[:sort_by] = fields.first.to_s.camelize
+          else
+            @where[:sort_by] = fields.collect{|f| f.to_s.camelize}
+          end
+          self
+        end
+        
+        # Field names need to be camelized for OTRS
         def camelized_where_attributes
           new_where = {}
           @where.each do |key,value|
