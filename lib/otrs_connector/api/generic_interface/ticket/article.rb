@@ -20,8 +20,8 @@ module OTRSConnector
           attribute :article_type
           attribute :article_type_id, type: Integer
           attribute :content_type
-          attribute :charset
-          attribute :mime_type
+          attribute :charset, default: 'utf8'
+          attribute :mime_type, default: 'text/plain'
           attribute :incoming_time
         end
       end
