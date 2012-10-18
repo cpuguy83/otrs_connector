@@ -57,6 +57,7 @@ module OTRSConnector
         attribute :state_id, type: Integer
         attribute :state
         attribute :customer_user
+        attribute :article
         
         def self.find(id, options={})
           new_options = {}
@@ -110,11 +111,8 @@ module OTRSConnector
         end
         
         # Pass in an extra_options hash to supply your own history_type and history_comment
-        # In order to create a ticket you must pass in an Article instnace inside an array to ticket.articles !!There can be only 1!!
         # If you want to include Dynamic fields, you must add to ticket.dynamic_fields an array of DynamicField instances
         def save(extra_options={})
-          a = articles.first
-          
           # Get just the dynamic_field attributes to send to OTRS
           new_dynamic_fields = dynamic_fields.collect{|f| {'Name' => f.name, 'Value' => f.value}} if dynamic_fields
           options = {
@@ -139,24 +137,61 @@ module OTRSConnector
               'Responsible'   => responsible,
               'CustomerUser'  => customer_user
             },
-            'Article' => {
-              'ArticleTypeID' => a.article_type_id,
-              'ArticleType'   => a.article_type,
-              'SenderType'    => a.sender_type,
-              'MimeType'      => a.mime_type || 'text/plain',
-              'Charset'       => a.charset || 'utf8',
-              'From'          => a.from,
-              'Subject'       => a.subject,
-              'Body'          => a.body,
-              'HistoryType'   => extra_options[:history_type] || self.class.default_history_type,
-              'HistoryComment'  => extra_options[:history_comment] || self.class.default_history_comment
-            },
-            'DynamicField' => new_dynamic_fields
+            'Article' => ({
+              'ArticleTypeID' => article.article_type_id,
+              'ArticleType'   => article.article_type,
+              'SenderType'    => article.sender_type,
+              'MimeType'      => article.mime_type || 'text/plain',
+              'Charset'       => article.charset || 'utf8',
+              'From'          => article.from,
+              'Subject'       => article.subject,
+              'Body'          => article.body,
+              'HistoryType'    => extra_options[:history_type] || self.class.default_history_type,
+              'HistoryComment' => extra_options[:history_comment] || self.class.default_history_comment
+            } if article),
+            'DynamicField' => (new_dynamic_fields if dynamic_fields)
           }
           response = self.class.connect 'TicketCreate', options
           # Pull the full new record from OTRS so we can have an ID
           self.attributes = self.class.find(response[:ticket_id], dynamic_fields: true, articles: true).attributes
           self
+        end
+        
+        def update_attributes(updated_attributes={})
+          options = { 'TicketID' => id }
+          if updated_attributes[:article]
+            article = updated_attributes[:article]
+            options['Article'] = {
+              'ArticleTypeID' => article.article_type_id,
+              'ArticleType'   => article.article_type,
+              'SenderType'    => article.sender_type,
+              'MimeType'      => article.mime_type || 'text/plain',
+              'Charset'       => article.charset || 'utf8',
+              'From'          => article.from,
+              'Subject'       => article.subject,
+              'Body'          => article.body,
+              'HistoryType'    => self.class.default_history_type,
+              'HistoryComment' => self.class.default_history_comment
+            }
+          end
+          if updated_attributes[:dynamic_fields]
+            options['DynamicField'] = []
+            df_s = updated_attributes[:dynamic_fields]
+            df_s.each do |f|
+              options['DynamicField'] << { 'Name' => f.name, 'Value' => f.value }
+            end
+          elsif updated_attributes[:dynamic_field]
+            df = updated_attributes[:dynamic_field]
+            options['DynamicField'] = { 'Name' => df.name, 'Value' => df.value }
+          end
+          updated_attributes.except(:article, :dynamic_fields, :dynamic_field).each do |key, value|
+            options['Ticket'] = {} unless options['Ticket']
+            options['Ticket'][key.to_s.camelize] = value
+          end
+          response = self.class.connect 'TicketUpdate', options
+          updated_ticket = self.class.find(response[:ticket_id], dynamic_fields: true, articles: true)
+          self.attributes = updated_ticket.attributes
+          true
         end
         
         
