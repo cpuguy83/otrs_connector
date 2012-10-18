@@ -197,6 +197,7 @@ module OTRSConnector
         def self.where(attributes)
           Query.new(self).where(attributes)
         end
+        
       end
     end
   end
