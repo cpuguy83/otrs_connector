@@ -90,7 +90,7 @@ module OTRSConnector
           ticket.articles = response[:article].collect do |a| 
             a[:id] = a[:article_id]
             Article.new a
-          end
+          end if options[:articles] == true
           
           ticket.dynamic_fields = dynamic_fields if dynamic_fields.any?
           ticket
