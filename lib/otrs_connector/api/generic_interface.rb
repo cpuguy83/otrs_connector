@@ -29,8 +29,8 @@ module OTRSConnector
         end
       end
       
-      def self.find_or_create_session
-        if self.session_id
+      def self.find_or_create_session(force_create=false)
+        if self.session_id and force_create == false
           return self.session_id
         else
           @session = OTRSConnector::API::GenericInterface::Session.new(user: OTRSConnector::API.login_user, password: OTRSConnector::API.login_password, wsdl_endpoint: self.default_wsdl_endpoint).create
@@ -45,13 +45,44 @@ module OTRSConnector
         def connect(method, options)
           client.wsdl.document = self.wsdl
           client.wsdl.endpoint = self.wsdl_endpoint
-          options['SessionID'] = OTRSConnector::API::GenericInterface.find_or_create_session if !options['SessionID']
-          raise if !options['SessionID']
-          response = self.client.request method do
-            soap.body = options
+          options['SessionID'] = OTRSConnector::API::GenericInterface.find_or_create_session if !options['SessionID'] unless method == 'SessionCreate'
+          raise OTRSConnector::API::GenericInterface::NoSessionError if !options['SessionID'] unless method == 'SessionCreate'
+          auth_retry_count = 0
+          timeout_retry_count = 0
+          begin
+            response = self.client.request method do
+              soap.body = options
+            end
+            response = response.to_hash
+            
+            # Check for errors
+            if response.first[1][:error]
+              error = response.first[1][:error]
+              exception_class = "OTRSConnector::API::GenericInterface::#{error[:error_code].split('.')[1]}Error"
+              # Check if a custom exception is defined
+              if OTRSConnector.class_exists?(exception_class)
+                # Raise custom exception
+                raise exception_class.constantize, error[:error_message]
+              else
+                # Raise runtime error if no custom exception
+                raise error[:error_code].split('.')[1]
+              end
+            end
+          
+          rescue OTRSConnector::API::GenericInterface::AuthFailError
+            options['SessionID'] = OTRSConnector::API::GenericInterface.find_or_create_session(true) unless method == 'SessionCreate'
+            auth_retry_count += 1
+            printf "\n\nAuth Failed, creating new session and trying again\n\n"
+            retry if auth_retry_count < 2
+
+          rescue Timeout::Error
+            client.http.open_timeout += 50
+            client.http.read_timeout += 50
+            timeout_retry_count += 1
+            retry if timeout_retry_count <= 3
+            
           end
-          response = response.to_hash
-          raise response.first[1][:error][:error_code] if response.first[1][:error]
+            
           response.first[1]
         end
         
@@ -63,3 +94,4 @@ end
 require_relative 'generic_interface/session'
 require_relative 'generic_interface/ticket'
 require_relative 'generic_interface/query'
+require_relative 'generic_interface/exception'
