@@ -49,6 +49,7 @@ module OTRSConnector
           raise OTRSConnector::API::GenericInterface::NoSessionError if !options['SessionID'] unless method == 'SessionCreate'
           auth_retry_count = 0
           timeout_retry_count = 0
+          eof_retry_count = 0
           begin
             response = self.client.request method do
               soap.body = options
@@ -80,7 +81,11 @@ module OTRSConnector
             client.http.read_timeout += 50
             timeout_retry_count += 1
             retry if timeout_retry_count <= 3
-            
+          
+          rescue EOFError
+            sleep 1
+            eof_retry_count += 1
+            retry if eof_retry_count <= 4
           end
             
           response.first[1]
