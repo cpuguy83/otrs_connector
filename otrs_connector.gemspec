@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Goff"]
-  s.date = "2012-10-22"
+  s.date = "2013-05-09"
   s.description = "Connect your RAILS app to OTRS/ITSM"
   s.email = "cpuguy83@gmail.com"
   s.extra_rdoc_files = [
