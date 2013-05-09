@@ -215,7 +215,7 @@ class OTRS::ConfigItem < OTRS
       count = xml[key].count
       if count == 1
         data[key] = value[count - 1]["Content"]
-        count2 = value[count -1].except("Content","TagKey").count
+        count2 = value[count - 1].except("Content","TagKey").count
         if count2 >= 1
           value[count - 1].except("Content","TagKey").each do |key2,value2|
             value2.delete(value2[0])
