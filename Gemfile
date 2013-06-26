@@ -4,7 +4,7 @@ source "http://rubygems.org"
 #   gem "activesupport", ">= 2.3.5"
 
 
-gem 'activesupport',  "~> 3.2"
+gem 'activesupport',  ">= 3.0"
 gem 'require_all', ">= 1.2"
 gem 'activemodel', ">= 3.0"
 
