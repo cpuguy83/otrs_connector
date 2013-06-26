@@ -6,7 +6,7 @@ source "http://rubygems.org"
 
 gem 'activesupport',  "~> 3.2"
 gem 'require_all', ">= 1.2"
-gem 'activemodel', "~> 3.2"
+gem 'activemodel', ">= 3.0"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
