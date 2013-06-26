@@ -46,11 +46,11 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/cpuguy83/otrs_connector"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "2.0.3"
+  s.rubygems_version = "1.8.24"
   s.summary = "Connects OTRS API to create tikets, manipulate CI's, etc."
 
   if s.respond_to? :specification_version then
-    s.specification_version = 4
+    s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<activesupport>, ["~> 3.2"])
