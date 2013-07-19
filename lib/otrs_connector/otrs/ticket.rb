@@ -20,7 +20,8 @@ class OTRS::Ticket < OTRS
     :ticket_free_text13, :state, :title, :ticket_free_text5, :ticket_free_text15,
     :ticket_free_text14, :state_type, :escalation_solution_time, :lock_id,
     :ticket_free_key2, :ticket_number, :ticket_free_key14, :lock,
-    :create_time_unix, :ticket_free_key4, :slaid, :ticket_free_key15, :ticket_free_text16
+    :create_time_unix, :ticket_free_key4, :slaid, :ticket_free_key15, :ticket_free_text16,
+    :change_by, :create_by
   
   def id
     self.ticket_id
@@ -111,6 +112,15 @@ class OTRS::Ticket < OTRS
       object
     end
   end
+  def self.search(attributes) 
+    #input attributes => https://github.com/OTRS/otrs/blob/rel-3_2/Kernel/System/TicketSearch.pm  
+    attributes['Result'] = 'ARRAY'
+    data = attributes
+    params = { :object => 'TicketObject', :method => 'TicketSearch', :data => data }
+    
+    return connect(params)[0].to_i
+  end
+  
   
   
   def self.where(attributes)
