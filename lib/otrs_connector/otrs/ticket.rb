@@ -112,6 +112,15 @@ class OTRS::Ticket < OTRS
       object
     end
   end
+  def self.search(attributes) 
+    #input attributes => https://github.com/OTRS/otrs/blob/rel-3_2/Kernel/System/TicketSearch.pm  
+    attributes['Result'] = 'ARRAY'
+    data = attributes
+    params = { :object => 'TicketObject', :method => 'TicketSearch', :data => data }
+    
+    return connect(params)[0].to_i
+  end
+  
   
   
   def self.where(attributes)

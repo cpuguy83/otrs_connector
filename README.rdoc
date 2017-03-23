@@ -4,15 +4,12 @@ otrs_connector connects to the OTRS API, with some modifications that opens up m
 By default only the ticketing system is opened to the external API in OTRS.
 Please see my other github project, rails_otrs to download the latest OTRS modifictions so that this will work correctly.
 
-otrs_connector only supports OTRS 3.0.x
-Support for 3.1.x is coming but is a major refactor (on both the OTRS API interface, which needs to be re-written and the main connector here).
-
+otrs_connector supports OTRS 3.2.9 (tested)
 
 This gem makes extensive use of ActiveModel and ActiveSupport (json encoding/decoding).
 It is tested with both Rails 3.0.x and Rails 3.1.x and should work with 3.2.x
 
 ===How to install
-    gem install otrs_connector
 or Add to your gemfile:
     gem 'otrs_connector'
 
@@ -26,6 +23,24 @@ Put these in your environment configuration, change based on your setup:
 The username/password should be setup as agents in your OTRS setup.
 Make sure the agent has proper permissions to access what you need from the API.
 The API url is the custom API interface file described above.  This will change once 3.1 support is added
+
+=== OTRS side of 
+install the IPhone handle package (http://doc.otrs.org/3.0/en/html/adminarea-package-manager.html)
+make
+make sure you have the right permissions in otrs in sysconfig:
+     iPhone::API::Object###TicketObject => (MoveList|MoveTicket|TicketGet|Ticket|NumberLookup|TicketSearch)
+These are minimal needs (not tested any further).
+
+== Usage
+     1.9.3-p0 :006 > OTRS::Ticket.search(:TicketNumber => "100001")
+     => 2
+     1.9.3-p0 :005 > OTRS::Ticket.find(2)
+     => #<OTRS::Ticket:0xabb9c84 ..... >
+
+[more to come...]     
+
+
+
 
 
 == Contributing to otrs_connector

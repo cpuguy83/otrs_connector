@@ -35,6 +35,7 @@ GEM
     thread_safe (0.1.0)
       atomic
     tzinfo (0.3.37)
+    will_paginate (3.0.4)
 
 PLATFORMS
   ruby
@@ -42,8 +43,9 @@ PLATFORMS
 DEPENDENCIES
   activemodel (>= 3.0)
   activesupport (>= 3.0)
-  bundler (~> 1.1)
+  bundler (>= 1.1)
   jeweler (~> 1.8.3)
   rdoc (~> 3.12)
   require_all (>= 1.2)
   shoulda
+  will_paginate (~> 3.0.0)
